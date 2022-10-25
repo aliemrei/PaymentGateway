@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayService
 {
-    public sealed class YapiKredi : GatewayBase, IGatewayProvider
+    public sealed class YapiKredi : GatewayBase
     {
         public override void MakePayment()
         {
@@ -70,19 +70,24 @@ namespace PaymentGatewayService
             return "Yapı Kredi Bankası";
         }
 
-        public void internalMakePayment()
+        public override void internalMakePayment()
         {
-            throw new NotImplementedException();
+            base.internalMakePayment();
+
+            if (this.IsValid)
+            {
+                //valid;
+            }
         }
 
-        public void internalCancelPayment()
+        public override void internalCancelPayment()
         {
-            throw new NotImplementedException();
+            base.internalCancelPayment();
         }
 
-        public void internalRefundPayment(decimal Amount)
+        public override void internalRefundPayment(decimal Amount)
         {
-            throw new NotImplementedException();
+            base.internalRefundPayment(Amount);
         }
     }
 }
