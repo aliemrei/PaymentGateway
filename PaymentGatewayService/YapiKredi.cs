@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayService
 {
-    public sealed class Garanti : GatewayBase, IGatewayProvider
+    public sealed class YapiKredi : GatewayBase, IGatewayProvider
     {
         public override void MakePayment()
         {
@@ -67,7 +67,7 @@ namespace PaymentGatewayService
 
         public override string? ToString()
         {
-            return "Garanti Bankası";
+            return "Yapı Kredi Bankası";
         }
 
         public void internalMakePayment()
