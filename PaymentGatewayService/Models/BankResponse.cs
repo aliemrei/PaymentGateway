@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentGatewayService
+namespace PaymentGatewayService.Models
 {
     public class BankResponse
     {

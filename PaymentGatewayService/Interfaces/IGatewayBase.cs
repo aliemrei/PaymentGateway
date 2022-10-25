@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PaymentGatewayService.Models;
 
 namespace PaymentGatewayService.Interfaces
 {
@@ -11,6 +12,7 @@ namespace PaymentGatewayService.Interfaces
         public string AccountId { get; set; }
         public string TerminalId { get; set; }
         public string TransactionId { get; set; }
+        BankRequest Request { get; set;  }
         BankResponse Response { get; set; }
         abstract void MakePayment();
         abstract void CancelPayment();

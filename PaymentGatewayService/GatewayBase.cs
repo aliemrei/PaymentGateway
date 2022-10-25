@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PaymentGatewayService.Models;
 
 namespace PaymentGatewayService
 {
@@ -12,6 +13,7 @@ namespace PaymentGatewayService
         public string AccountId { get; set; } = string.Empty;
         public string TerminalId { get; set; } = string.Empty;
         public string TransactionId { get; set; } = string.Empty;
+        public BankRequest Request { get; set; } = new BankRequest();
         public BankResponse Response { get; set; } = new BankResponse();
 
         private void ToLog()
@@ -32,9 +34,5 @@ namespace PaymentGatewayService
         {
             ToLog();
         }
-
-        
-
- 
     }
 }
