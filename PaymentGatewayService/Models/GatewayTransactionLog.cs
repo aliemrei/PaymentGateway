@@ -9,6 +9,7 @@ namespace PaymentGatewayService.Models
 {
     internal sealed class GatewayTransactionLog : IGatewayBase
     {
+        public string Action { get; set; } = string.Empty;
         public string AccountId { get; set; } = string.Empty;
         public string TerminalId { get; set; } = string.Empty;
         public string TransactionId { get; set; } = string.Empty;

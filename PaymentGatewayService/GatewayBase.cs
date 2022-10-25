@@ -23,41 +23,24 @@ namespace PaymentGatewayService
 
         public event GatewayLogEventHandler? OnLog = null;
 
-        private void ToLog()
+        private void ToLog(string ActionMethod)
         {
-            GatewayTransactionLog gatewayTransactionLog = new GatewayTransactionLog
-            {
-                AccountId = this.AccountId,
-                TerminalId = this.TerminalId,
-                TransactionId = this.TransactionId,
-                Request = this.Request,
-                Response = this.Response
-            };
-               
-            string logText = JsonSerializer.Serialize(gatewayTransactionLog);
-
             if (OnLog != null)
+            {
+                GatewayTransactionLog gatewayTransactionLog = new GatewayTransactionLog
+                {
+                    Action = ActionMethod,
+                    AccountId = this.AccountId,
+                    TerminalId = this.TerminalId,
+                    TransactionId = this.TransactionId,
+                    Request = this.Request,
+                    Response = this.Response
+                };
+
+                string logText = JsonSerializer.Serialize(gatewayTransactionLog);
+
                 OnLog(this, new GatewayLogEventArgs { LogText = logText });
-        }
-
-        public virtual void MakePayment()
-        {
-            this.ToLog();
-        }
-
-        public virtual void CancelPayment()
-        {
-            this.ToLog();
-        }
-
-        public virtual void RefundPayment(decimal Amount)
-        {
-            this.ToLog();
-        }
-
-        public virtual void internalMakePayment()
-        {
-            this.Validate();
+            }
         }
 
         private void Validate()
@@ -67,6 +50,26 @@ namespace PaymentGatewayService
             var context = new ValidationContext(this.Request);
 
             this.IsValid = Validator.TryValidateObject(this.Request, context, this.ValidationErrors, true);
+        }
+
+        public virtual void MakePayment()
+        {
+            this.ToLog("MakePayment");
+        }
+
+        public virtual void CancelPayment()
+        {
+            this.ToLog("CancelPayment");
+        }
+
+        public virtual void RefundPayment(decimal Amount)
+        {
+            this.ToLog($"RefundPayment {Amount}");
+        }
+
+        public virtual void internalMakePayment()
+        {
+            this.Validate();
         }
 
         public virtual void internalCancelPayment()
