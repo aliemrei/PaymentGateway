@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using PaymentGatewayService.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace PaymentGatewayService
 {
-    public abstract class GatewayBase : IGatewayBase, IGatewayProvider
+    public abstract class GatewayBase : IGatewayBase, IGateway, IGatewayProvider
     {
+        public delegate void GatewayLogEventHandler(object sender, GatewayLogEventArgs e);
         public string AccountId { get; set; } = string.Empty;
         public string TerminalId { get; set; } = string.Empty;
         public string TransactionId { get; set; } = string.Empty;
@@ -19,24 +21,38 @@ namespace PaymentGatewayService
         public List<ValidationResult> ValidationErrors { get; set; } = new List<ValidationResult>();
         public bool IsValid { get; private set; }
 
+        public event GatewayLogEventHandler? OnLog = null;
+
         private void ToLog()
         {
-            //Log
+            GatewayTransactionLog gatewayTransactionLog = new GatewayTransactionLog
+            {
+                AccountId = this.AccountId,
+                TerminalId = this.TerminalId,
+                TransactionId = this.TransactionId,
+                Request = this.Request,
+                Response = this.Response
+            };
+               
+            string logText = JsonSerializer.Serialize(gatewayTransactionLog);
+
+            if (OnLog != null)
+                OnLog(this, new GatewayLogEventArgs { LogText = logText });
         }
 
         public virtual void MakePayment()
         {
-            ToLog();
+            this.ToLog();
         }
 
         public virtual void CancelPayment()
         {
-            ToLog();
+            this.ToLog();
         }
 
         public virtual void RefundPayment(decimal Amount)
         {
-            ToLog();
+            this.ToLog();
         }
 
         public virtual void internalMakePayment()

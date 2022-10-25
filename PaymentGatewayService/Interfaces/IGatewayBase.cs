@@ -14,8 +14,6 @@ namespace PaymentGatewayService.Interfaces
         public string TransactionId { get; set; }
         BankRequest Request { get; set;  }
         BankResponse Response { get; set; }
-        abstract void MakePayment();
-        abstract void CancelPayment();
-        abstract void RefundPayment(decimal Amount);
+        
     }
 }
