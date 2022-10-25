@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayService.Models
 {
-    public class BankResponse
+    public sealed class BankResponse
     {
         public string TransactionId { get; set; } = string.Empty;
         public bool Result { get; set; }

@@ -9,8 +9,31 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayService.Models
 {
-    public class BankRequest
+    public sealed class BankRequest
     {
+        public BankRequest()
+        {
+
+        }
+
+        public BankRequest(string CardNumber, string CardHolder, int ExpireYear,
+            int ExpireMonth, int Cvv, decimal Amount, CurrencyCodes CurrecyCode)
+        {
+            this.CardNumber = CardNumber;
+
+            this.CardHolder = CardHolder;
+
+            this.ExpireYear = ExpireYear;
+
+            this.ExpireMonth = ExpireMonth;
+
+            this.Cvv = Cvv;
+
+            this.Amount = Amount;
+
+            this.CurrecyCode = CurrecyCode;
+        }
+
         [CreditCard]
         [Required]
         public string CardNumber { get; set; } = string.Empty;
