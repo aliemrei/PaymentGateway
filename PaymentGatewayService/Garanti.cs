@@ -65,8 +65,6 @@ namespace PaymentGatewayService
             }
         }
 
-         
-
         public override string? ToString()
         {
             return "Garanti Bankası";
@@ -86,6 +84,5 @@ namespace PaymentGatewayService
         {
             throw new NotImplementedException();
         }
-
     }
 }
