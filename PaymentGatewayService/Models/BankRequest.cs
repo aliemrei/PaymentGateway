@@ -28,7 +28,7 @@ namespace PaymentGatewayService.Models
             this.ExpireMonth = ExpireMonth;
 
             this.Cvv = Cvv;
-
+          
             this.Amount = Amount;
 
             this.CurrecyCode = CurrecyCode;

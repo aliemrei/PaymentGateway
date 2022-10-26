@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayService
 {
-    public sealed class YapiKredi : GatewayBase
+    public sealed class YapiKredi : GatewayBase, IGatewayProvider
     {
         public override void MakePayment()
         {

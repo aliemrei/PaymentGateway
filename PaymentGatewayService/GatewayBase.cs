@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace PaymentGatewayService
 {
-    public abstract class GatewayBase : IGatewayBase, IGateway, IGatewayProvider
+    public abstract class GatewayBase : IGatewayBase, IGateway
     {
         public delegate void GatewayLogEventHandler(object sender, GatewayLogEventArgs e);
         public string AccountId { get; set; } = string.Empty;
@@ -43,7 +43,7 @@ namespace PaymentGatewayService
             }
         }
 
-        private void Validate()
+        protected void Validate()
         {
             this.ValidationErrors.Clear();
 
@@ -65,21 +65,6 @@ namespace PaymentGatewayService
         public virtual void RefundPayment(decimal Amount)
         {
             this.ToLog($"RefundPayment {Amount}");
-        }
-
-        public virtual void internalMakePayment()
-        {
-            this.Validate();
-        }
-
-        public virtual void internalCancelPayment()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void internalRefundPayment(decimal Amount)
-        {
-            throw new NotImplementedException();
         }
     }
 }
