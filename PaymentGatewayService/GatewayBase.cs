@@ -66,5 +66,17 @@ namespace PaymentGatewayService
         {
             this.ToLog($"RefundPayment {Amount}");
         }
+
+        public static GatewayBase? GetGatewayByClassName(string Classname)
+        {
+            var instanceType = Type.GetType($"PaymentGatewayService.{Classname}");
+
+            if (instanceType != null)
+            {
+                return (GatewayBase?)Activator.CreateInstance(instanceType);
+            }
+
+            return null;
+        }
     }
 }
