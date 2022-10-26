@@ -1,0 +1,43 @@
+﻿@model PaymentModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    @Html.HiddenFor(x => x.TransactionId)
+    <div class="form-group">
+        @Html.LabelFor(x => x.Gateway)
+        @Html.DropDownListFor(x => x.Gateway, (IEnumerable<SelectListItem>)ViewBag.Gateways, new {@class="form-control"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Request.CardHolder)
+        @Html.TextBoxFor(x => x.Request.CardHolder, new {@class="form-control"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Request.CardNumber)
+        @Html.TextBoxFor(x => x.Request.CardNumber, new {@class="form-control"})
+    </div>
+    <div class="row">
+        <div class="form-group col-md-3">
+            @Html.LabelFor(x => x.Request.ExpireMonth)
+            @Html.TextBoxFor(x => x.Request.ExpireMonth, new {@class="form-control"})
+        </div>
+        <div class="form-group  col-md-3">
+            @Html.LabelFor(x => x.Request.ExpireYear)
+            @Html.TextBoxFor(x => x.Request.ExpireYear, new {@class="form-control"})
+        </div>
+    </div>
+         
+    <div class="form-group col-md-3">
+        @Html.LabelFor(x => x.Request.Cvv)
+        @Html.TextBoxFor(x => x.Request.Cvv, new {@class="form-control"})
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Request.Amount)
+        @Html.TextBoxFor(x => x.Request.Amount, new {@class="form-control"})
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+}

@@ -1,4 +1,20 @@
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using PaymentGatewayWebApp.Models;
+using PaymentGatewayWebApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<PaymentsDatabaseSettings>(
+                builder.Configuration.GetSection(nameof(PaymentsDatabaseSettings)));
+
+builder.Services.AddSingleton<IPaymentsDatabaseSettings>(sp =>
+    sp.GetRequiredService<IOptions<PaymentsDatabaseSettings>>().Value);
+
+builder.Services.AddSingleton<IMongoClient>(s =>
+        new MongoClient(builder.Configuration.GetValue<string>("PaymentsDatabaseSettings:ConnectionString")));
+
+builder.Services.AddSingleton<IPaymentService, PaymentService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

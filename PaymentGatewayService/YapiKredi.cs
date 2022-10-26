@@ -70,9 +70,9 @@ namespace PaymentGatewayService
             return "Yapı Kredi Bankası";
         }
 
-        public override void internalMakePayment()
+        public void internalMakePayment()
         {
-            base.internalMakePayment();
+            this.Validate();
 
             if (this.IsValid)
             {
@@ -80,14 +80,14 @@ namespace PaymentGatewayService
             }
         }
 
-        public override void internalCancelPayment()
+        public void internalCancelPayment()
         {
-            base.internalCancelPayment();
+            
         }
 
-        public override void internalRefundPayment(decimal Amount)
+        public void internalRefundPayment(decimal Amount)
         {
-            base.internalRefundPayment(Amount);
+           
         }
     }
 }

@@ -76,7 +76,9 @@ namespace PaymentGatewayService
 
             if (this.IsValid)
             {
-                //valid;
+                this.Response.Result = true;
+
+                this.Response.AuthCode = DateTime.Now.ToString();
             }
         }
 

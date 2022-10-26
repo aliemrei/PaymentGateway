@@ -17,7 +17,7 @@ namespace PaymentGatewayService.Models
         }
 
         public BankRequest(string CardNumber, string CardHolder, int ExpireYear,
-            int ExpireMonth, int Cvv, double Amount, CurrencyCodes CurrecyCode)
+            int ExpireMonth, string Cvv, double Amount, CurrencyCodes CurrecyCode)
         {
             this.CardNumber = CardNumber;
 
@@ -46,7 +46,7 @@ namespace PaymentGatewayService.Models
         public int ExpireMonth { get; set; }
         [Required]
         [MinLength(3, ErrorMessage = "Cvv must be minimum 3 length")]
-        public int Cvv { get; set; }
+        public string Cvv { get; set; }
         [Required]
         [Range(0.1, Double.MaxValue, ErrorMessage = "Amount {0} must be greater than {1}.")]
         public double Amount { get; set; }
