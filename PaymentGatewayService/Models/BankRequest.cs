@@ -49,7 +49,7 @@ namespace PaymentGatewayService.Models
         public int Cvv { get; set; }
         [Required]
         [Range(0.1, Double.MaxValue, ErrorMessage = "Amount {0} must be greater than {1}.")]
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
         public CurrencyCodes CurrecyCode { get; set; } = CurrencyCodes.TRY;
         public CardBrands CardBrand { 
             get 
