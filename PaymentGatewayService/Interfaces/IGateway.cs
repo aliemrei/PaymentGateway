@@ -8,8 +8,8 @@ namespace PaymentGatewayService.Interfaces
 {
     internal interface IGateway
     {
-        abstract void MakePayment();
-        abstract void CancelPayment();
-        abstract void RefundPayment(decimal Amount);
+        void MakePayment();
+        void CancelPayment();
+        void RefundPayment(decimal Amount);
     }
 }
