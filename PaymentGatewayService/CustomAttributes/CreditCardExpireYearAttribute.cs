@@ -12,11 +12,7 @@ namespace PaymentGatewayService.CustomAttributes
     {
         public override bool IsValid(object? value)
         {
-            if (value != null && (int?)value >= DateTime.Today.Year)
-                return true;
-
-            return false;
+            return (int?)value >= DateTime.Today.Year;
         }
-         
     }
 }
