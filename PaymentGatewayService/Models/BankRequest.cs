@@ -17,7 +17,7 @@ namespace PaymentGatewayService.Models
         }
 
         public BankRequest(string CardNumber, string CardHolder, int ExpireYear,
-            int ExpireMonth, int Cvv, decimal Amount, CurrencyCodes CurrecyCode)
+            int ExpireMonth, int Cvv, double Amount, CurrencyCodes CurrecyCode)
         {
             this.CardNumber = CardNumber;
 
