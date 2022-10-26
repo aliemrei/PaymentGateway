@@ -76,7 +76,9 @@ namespace PaymentGatewayService
 
             if (this.IsValid)
             {
-                //valid;
+                Response.Result = false;
+
+                Response.Errors.Add(new Exception("There is an error!"));
             }
         }
 

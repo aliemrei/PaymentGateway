@@ -65,7 +65,7 @@ namespace PaymentGatewayWebApp.Controllers
                         {
                             foreach (var error in gateway.Response.Errors)
                             {
-                                ModelState.TryAddModelException("", error);
+                                ModelState.AddModelError("", error.Message);
                             }
                         }
                     }
