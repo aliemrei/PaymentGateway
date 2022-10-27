@@ -37,45 +37,26 @@ namespace PaymentGatewayWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var gateway = _paymentService.GetGatewayByClassName(model.Gateway);
-
-                if (gateway != null)
+                try
                 {
-                    try
+                    var gateway = _paymentService.MakePayment(model);
+                     
+                    if (gateway.Response.Result)
                     {
-                        var payment = _paymentService.Create(model);
-
-                        gateway.OnLog += Gateway_OnLog;
-
-                        gateway.TransactionId = model.TransactionId;
-
-                        gateway.Request = model.Request;
-
-                        gateway.MakePayment();
-
-                        payment.Response.Add(gateway.Response);
-
-                        _paymentService.Update(payment.Id, payment);
-
-                        if (gateway.Response.Result)
-                        {
-                            return View("Success", gateway);
-                        }
-                        else
-                        {
-                            foreach (var error in gateway.Response.Errors)
-                            {
-                                ModelState.AddModelError("", error.Message);
-                            }
-                        }
+                        return View("Success", gateway);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        ModelState.TryAddModelException("", ex);
+                        foreach (var error in gateway.Response.Errors)
+                        {
+                            ModelState.AddModelError("", error.Message);
+                        }
                     }
                 }
-                else
-                    ModelState.AddModelError("", $"{model.Gateway} did not find.");
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
 
             ViewBag.Gateways = _paymentService.GetGatewayNames()
@@ -83,11 +64,6 @@ namespace PaymentGatewayWebApp.Controllers
                     .ToList();
 
             return View(model);
-        }
-
-        private void Gateway_OnLog(object sender, PaymentGatewayService.Models.GatewayLogEventArgs e)
-        {
-
         }
     }
 }

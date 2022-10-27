@@ -15,7 +15,7 @@ builder.Services.AddSingleton<IMongoClient>(s =>
         new MongoClient(builder.Configuration.GetValue<string>("PaymentsDatabaseSettings:ConnectionString")));
 
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
-
+ 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

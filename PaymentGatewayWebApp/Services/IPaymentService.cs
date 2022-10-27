@@ -5,6 +5,7 @@ namespace PaymentGatewayWebApp.Services
 {
     public interface IPaymentService
     {
+        GatewayBase MakePayment(PaymentModel model);
         List<PaymentModel> Get();
         PaymentModel Get(string Id);
         PaymentModel Create(PaymentModel payment);

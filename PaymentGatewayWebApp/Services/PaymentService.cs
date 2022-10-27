@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using PaymentGatewayService;
+using PaymentGatewayService.Models;
 using PaymentGatewayWebApp.Models;
 using System.Reflection;
 
@@ -18,6 +19,37 @@ namespace PaymentGatewayWebApp.Services
 
             _payments = database.GetCollection<PaymentModel>(settings.PaymentsCollectionName);
 
+        }
+
+        public GatewayBase MakePayment(PaymentModel model)
+        {
+            var gateway = GetGatewayByClassName(model.Gateway);
+
+            if (gateway != null)
+            {
+                try
+                {
+                    var payment = Create(model);
+
+                    gateway.TransactionId = model.TransactionId;
+
+                    gateway.Request = model.Request;
+
+                    gateway.MakePayment();
+
+                    payment.Response.Add(gateway.Response);
+
+                    Update(payment.Id, payment);                    
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+                throw new Exception($"{model.Gateway} did not find.");
+
+            return gateway;
         }
 
         public PaymentModel Create(PaymentModel payment)
@@ -68,10 +100,18 @@ namespace PaymentGatewayWebApp.Services
             {
                 var gateway = (GatewayBase?)Activator.CreateInstance(instanceType);
 
+                if (gateway != null)
+                    gateway.OnLog += Gateway_OnLog;
+
                 return gateway;
             }
 
             return null;
+        }
+
+        private void Gateway_OnLog(object sender, PaymentGatewayService.Models.GatewayLogEventArgs e)
+        {
+            //log
         }
     }
 }
