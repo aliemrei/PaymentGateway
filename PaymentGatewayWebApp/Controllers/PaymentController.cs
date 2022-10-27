@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentGatewayWebApp.Services;
-using PaymentGatewayService;
 using PaymentGatewayWebApp.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics;
 
 namespace PaymentGatewayWebApp.Controllers
 {
     public class PaymentController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<PaymentController> _logger;
         private readonly IPaymentService _paymentService;
 
-        public PaymentController(ILogger<HomeController> logger,
+        public PaymentController(ILogger<PaymentController> logger,
             IPaymentService paymentService)
         {
             _logger = logger;

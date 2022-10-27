@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using PaymentGatewayService;
-using PaymentGatewayService.Models;
 using PaymentGatewayWebApp.Models;
 using System.Reflection;
 
