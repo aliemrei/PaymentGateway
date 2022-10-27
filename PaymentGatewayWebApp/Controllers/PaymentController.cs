@@ -26,12 +26,11 @@ namespace PaymentGatewayWebApp.Controllers
                 TransactionId = Guid.NewGuid().ToString(),
             };
 
-            ViewBag.Gateways = _paymentService.GetGatewayNames()
-                .Select(x => new SelectListItem(x, x))
-                .ToList();
+            ViewBag.Gateways = _paymentService.GatewayNamesForDropdown();
 
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Index(PaymentModel model)
         {
@@ -59,9 +58,7 @@ namespace PaymentGatewayWebApp.Controllers
                 }
             }
 
-            ViewBag.Gateways = _paymentService.GetGatewayNames()
-                    .Select(x => new SelectListItem(x, x))
-                    .ToList();
+            ViewBag.Gateways = _paymentService.GatewayNamesForDropdown();
 
             return View(model);
         }

@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MongoDB.Driver;
 using PaymentGatewayService;
 using PaymentGatewayService.Models;
 using PaymentGatewayWebApp.Models;
@@ -18,7 +19,6 @@ namespace PaymentGatewayWebApp.Services
             var database = mongoClient.GetDatabase(settings.DatabaseName);
 
             _payments = database.GetCollection<PaymentModel>(settings.PaymentsCollectionName);
-
         }
 
         public GatewayBase MakePayment(PaymentModel model)
@@ -79,7 +79,7 @@ namespace PaymentGatewayWebApp.Services
         {
             _payments.ReplaceOne(payment => payment.Id == Id, payment);
         }
-        public List<string> GetGatewayNames()
+        private List<string> GetGatewayNames()
         {
             List<string> objects = new List<string>();
             foreach (Type type in
@@ -90,6 +90,13 @@ namespace PaymentGatewayWebApp.Services
             }
             objects.Sort();
             return objects;
+        }
+
+        public List<SelectListItem> GatewayNamesForDropdown()
+        {
+            return GetGatewayNames()
+                  .Select(x => new SelectListItem(x, x))
+                  .ToList();
         }
 
         public GatewayBase? GetGatewayByClassName(string Classname)
