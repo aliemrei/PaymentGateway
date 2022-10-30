@@ -18,6 +18,7 @@ namespace PaymentGatewayWebApp.Controllers
             _paymentService = paymentService;
         }
 
+        [IgnoreAntiforgeryToken]
         public IActionResult Index()
         {
             var model = new PaymentModel()

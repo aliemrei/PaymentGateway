@@ -8,13 +8,10 @@ namespace PaymentGatewayWebApp.Services
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IPaymentsDatabaseSettings settings;
         private readonly IMongoCollection<PaymentModel> _payments;
 
         public PaymentService(IPaymentsDatabaseSettings settings, IMongoClient mongoClient)
         {
-            this.settings = settings;
-
             var database = mongoClient.GetDatabase(settings.DatabaseName);
 
             _payments = database.GetCollection<PaymentModel>(settings.PaymentsCollectionName);
@@ -78,12 +75,12 @@ namespace PaymentGatewayWebApp.Services
         {
             _payments.ReplaceOne(payment => payment.Id == Id, payment);
         }
-        private List<string> GetGatewayNames()
+        private List<string> getGatewayNames()
         {
             List<string> objects = new List<string>();
             foreach (Type type in
                 Assembly.GetAssembly(typeof(GatewayBase)).GetTypes()
-                   .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(GatewayBase))))
+                   .Where(_type => _type.IsClass && !_type.IsAbstract && _type.IsSubclassOf(typeof(GatewayBase))))
             {
                 objects.Add(type.Name);
             }
@@ -93,7 +90,7 @@ namespace PaymentGatewayWebApp.Services
 
         public List<SelectListItem> GatewayNamesForDropdown()
         {
-            return GetGatewayNames()
+            return getGatewayNames()
                   .Select(x => new SelectListItem(x, x))
                   .ToList();
         }
@@ -107,7 +104,7 @@ namespace PaymentGatewayWebApp.Services
                 var gateway = (GatewayBase?)Activator.CreateInstance(instanceType);
 
                 if (gateway != null)
-                    gateway.OnLog += Gateway_OnLog;
+                    gateway.OnLog += gateway_OnLog;
 
                 return gateway;
             }
@@ -115,7 +112,7 @@ namespace PaymentGatewayWebApp.Services
             return null;
         }
 
-        private void Gateway_OnLog(object sender, PaymentGatewayService.Models.GatewayLogEventArgs e)
+        private void gateway_OnLog(object sender, PaymentGatewayService.Models.GatewayLogEventArgs e)
         {
             //log
         }

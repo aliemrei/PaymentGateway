@@ -23,7 +23,7 @@ namespace PaymentGatewayService
 
         public event GatewayLogEventHandler? OnLog = null;
 
-        private void ToLog(string ActionMethod)
+        private void toLog(string ActionMethod)
         {
             if (OnLog != null)
             {
@@ -54,17 +54,17 @@ namespace PaymentGatewayService
 
         public virtual void MakePayment()
         {
-            this.ToLog("MakePayment");
+            this.toLog("MakePayment");
         }
 
         public virtual void CancelPayment()
         {
-            this.ToLog("CancelPayment");
+            this.toLog("CancelPayment");
         }
 
         public virtual void RefundPayment(decimal Amount)
         {
-            this.ToLog($"RefundPayment {Amount}");
+            this.toLog($"RefundPayment {Amount}");
         }
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using PaymentGatewayWebApp.Models;
@@ -17,7 +18,10 @@ builder.Services.AddSingleton<IMongoClient>(s =>
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
  
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opt =>
+{
+    opt.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 
 var app = builder.Build();
 
