@@ -10,7 +10,7 @@ namespace PaymentGatewayService.Models
     {
         public string TransactionId { get; set; } = string.Empty;
         public bool Result { get; set; }
-        public List<Exception> Errors { get; set; } = new List<Exception>();
+        public List<string> Errors { get; set; } = new List<string>();
         public string AuthCode { get; set; } = string.Empty;
         public string BankMessage { get; set; } = string.Empty;
     }

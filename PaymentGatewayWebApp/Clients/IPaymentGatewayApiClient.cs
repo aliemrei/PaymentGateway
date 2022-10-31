@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using PaymentGatewayService;
+﻿using PaymentGatewayService;
 using PaymentGatewayWebApi.Models;
 
-namespace PaymentGatewayWebApp.Services
+namespace PaymentGatewayWebApp.Clients
 {
-    public interface IPaymentService
+    public interface IPaymentGatewayApiClient
     {
         Task<List<PaymentModel>?> Get();
         Task<PaymentModel?> Get(string Id);
         Task<PaymentModel?> Create(PaymentModel payment);
         void Update(string Id, PaymentModel payment);
         void Remove(string Id);
+
         Task<PaymentModel?> MakePayment(PaymentModel model);
-        List<SelectListItem> GatewayNamesForDropdown();
     }
 }

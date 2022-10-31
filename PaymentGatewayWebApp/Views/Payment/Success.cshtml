@@ -1,5 +1,9 @@
-﻿@model PaymentGatewayService.GatewayBase
+﻿@model PaymentModel
 @{
 }
 
 <h1>Payment success fully completed!</h1>
+
+<pre>
+  @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model,new System.Text.Json.JsonSerializerOptions { WriteIndented = true}).ToString())
+</pre>

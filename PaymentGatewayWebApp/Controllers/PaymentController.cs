@@ -2,6 +2,8 @@
 using PaymentGatewayWebApp.Services;
 using PaymentGatewayWebApp.Models;
 using System.Diagnostics;
+using PaymentGatewayWebApi.Models;
+using PaymentGatewayService.Models;
 
 namespace PaymentGatewayWebApp.Controllers
 {
@@ -18,8 +20,15 @@ namespace PaymentGatewayWebApp.Controllers
             _paymentService = paymentService;
         }
 
-        [IgnoreAntiforgeryToken]
         public IActionResult Index()
+        {
+            var payments = _paymentService.Get().Result;
+            
+            return View(payments);
+        }
+
+        [IgnoreAntiforgeryToken]
+        public IActionResult New()
         {
             var model = new PaymentModel()
             {
@@ -32,25 +41,40 @@ namespace PaymentGatewayWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(PaymentModel model)
+        public IActionResult New(PaymentModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var gateway = _paymentService.MakePayment(model);
-                     
-                    if (gateway.Response.Result)
+                    var payment = _paymentService.MakePayment(model).Result;
+
+                    if (payment != null)
                     {
-                        return View("Success", gateway);
-                    }
-                    else
-                    {
-                        foreach (var error in gateway.Response.Errors)
+                        var result = payment.Response.LastOrDefault();
+
+                        if (result?.Result ?? false)
                         {
-                            ModelState.AddModelError("", error.Message);
+                            
+                            return RedirectToAction("Success", new { id = payment.Id });
+                        }
+                        else if (result != null)
+                        {
+                            foreach (var error in ((BankResponse)result).Errors)
+                            {
+                                ModelState.AddModelError("", error);
+                            }
                         }
                     }
+                }
+                catch (AggregateException ex)
+                {
+                    Exception e = ex.InnerException;
+                    do
+                        e = e.InnerException;
+                    while (e.InnerException != null);
+
+                    ModelState.AddModelError("", e.Message);
                 }
                 catch (Exception ex)
                 {
@@ -58,7 +82,16 @@ namespace PaymentGatewayWebApp.Controllers
                 }
             }
 
+            ModelState.AddModelError("", "Unexpected error!");
+
             ViewBag.Gateways = _paymentService.GatewayNamesForDropdown();
+
+            return View(model);
+        }
+
+        public IActionResult Success(string id)
+        {
+            var model = _paymentService.Get(id).Result;
 
             return View(model);
         }

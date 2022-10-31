@@ -14,7 +14,7 @@ namespace PaymentGatewayService
                 }
                 catch (Exception ex)
                 {
-                    this.Response.Errors.Add(ex);
+                    this.Response.Errors.Add(ex.Message);
                 }
             }
             finally
@@ -32,7 +32,7 @@ namespace PaymentGatewayService
                 }
                 catch (Exception ex)
                 {
-                    this.Response.Errors.Add(ex);
+                    this.Response.Errors.Add(ex.Message);
                 }
             }
             finally
@@ -51,7 +51,7 @@ namespace PaymentGatewayService
                 }
                 catch (Exception ex)
                 {
-                    this.Response.Errors.Add(ex);
+                    this.Response.Errors.Add(ex.Message);
                 }
             }
             finally

@@ -1,4 +1,4 @@
-﻿namespace PaymentGatewayWebApp.Models
+﻿namespace PaymentGatewayWebApi.Models
 {
     public class PaymentsDatabaseSettings : IPaymentsDatabaseSettings
     {

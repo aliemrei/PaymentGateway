@@ -1,80 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using MongoDB.Driver;
 using PaymentGatewayService;
-using PaymentGatewayWebApp.Models;
+using PaymentGatewayWebApi.Models;
+using PaymentGatewayWebApp.Clients;
 using System.Reflection;
 
 namespace PaymentGatewayWebApp.Services
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IMongoCollection<PaymentModel> _payments;
+        private readonly IPaymentGatewayApiClient _paymentGatewayApiClient;
 
-        public PaymentService(IPaymentsDatabaseSettings settings, IMongoClient mongoClient)
+        public PaymentService(IPaymentGatewayApiClient paymentGatewayApiClient)
         {
-            var database = mongoClient.GetDatabase(settings.DatabaseName);
-
-            _payments = database.GetCollection<PaymentModel>(settings.PaymentsCollectionName);
+            this._paymentGatewayApiClient = paymentGatewayApiClient;
         }
 
-        public GatewayBase MakePayment(PaymentModel model)
+        public async Task<PaymentModel?> Create(PaymentModel payment)
         {
-            var gateway = GetGatewayByClassName(model.Gateway);
-
-            if (gateway != null)
-            {
-                try
-                {
-                    var payment = Create(model);
-
-                    gateway.TransactionId = model.TransactionId;
-
-                    gateway.Request = model.Request;
-
-                    gateway.MakePayment();
-
-                    payment.Response.Add(gateway.Response);
-
-                    Update(payment.Id, payment);                    
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-            else
-                throw new Exception($"{model.Gateway} did not find.");
-
-            return gateway;
+            return await _paymentGatewayApiClient.Create(payment);
         }
 
-        public PaymentModel Create(PaymentModel payment)
+        public async Task<List<PaymentModel>?> Get()
         {
-            _payments.InsertOne(payment);
-
-            return payment;
+            return await _paymentGatewayApiClient.Get();
         }
 
-        public List<PaymentModel> Get()
+        public async Task<PaymentModel?> Get(string Id)
         {
-            return _payments.Find(payment => true).ToList();
+            return await _paymentGatewayApiClient.Get(Id);
         }
 
-        public PaymentModel Get(string Id)
+        public Task<PaymentModel?> MakePayment(PaymentModel model)
         {
-            return _payments.Find(payment => payment.Id == Id).FirstOrDefault();
-
+            return _paymentGatewayApiClient.MakePayment(model);
         }
 
         public void Remove(string Id)
         {
-            _payments.DeleteOne(payment => payment.Id == Id);
+            _paymentGatewayApiClient.Remove(Id);
         }
 
         public void Update(string Id, PaymentModel payment)
         {
-            _payments.ReplaceOne(payment => payment.Id == Id, payment);
+            _paymentGatewayApiClient.Update(Id, payment);
         }
+
         private List<string> getGatewayNames()
         {
             List<string> objects = new List<string>();
@@ -93,28 +63,6 @@ namespace PaymentGatewayWebApp.Services
             return getGatewayNames()
                   .Select(x => new SelectListItem(x, x))
                   .ToList();
-        }
-
-        public GatewayBase? GetGatewayByClassName(string Classname)
-        {
-            var instanceType = Type.GetType($"PaymentGatewayService.{Classname}, PaymentGatewayService");
-
-            if (instanceType != null)
-            {
-                var gateway = (GatewayBase?)Activator.CreateInstance(instanceType);
-
-                if (gateway != null)
-                    gateway.OnLog += gateway_OnLog;
-
-                return gateway;
-            }
-
-            return null;
-        }
-
-        private void gateway_OnLog(object sender, PaymentGatewayService.Models.GatewayLogEventArgs e)
-        {
-            //log
         }
     }
 }

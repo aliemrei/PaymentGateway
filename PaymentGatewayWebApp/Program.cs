@@ -1,23 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+using PaymentGatewayWebApp.Clients;
 using PaymentGatewayWebApp.Models;
 using PaymentGatewayWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<PaymentsDatabaseSettings>(
-                builder.Configuration.GetSection(nameof(PaymentsDatabaseSettings)));
+// Add services to the container.
 
-builder.Services.AddSingleton<IPaymentsDatabaseSettings>(sp =>
-    sp.GetRequiredService<IOptions<PaymentsDatabaseSettings>>().Value);
 
-builder.Services.AddSingleton<IMongoClient>(s =>
-        new MongoClient(builder.Configuration.GetValue<string>("PaymentsDatabaseSettings:ConnectionString")));
+builder.Services.AddSingleton<IPaymentGatewayApiClient, PaymentGatewayApiClient>();
+
+builder.Services.AddHttpClient<IPaymentGatewayApiClient, PaymentGatewayApiClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7175/api/");
+     
+}).AddHttpMessageHandler<LoggingHandler>();
+
+builder.Services.AddTransient<LoggingHandler>();
 
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
- 
-// Add services to the container.
+
 builder.Services.AddControllersWithViews(opt =>
 {
     opt.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
