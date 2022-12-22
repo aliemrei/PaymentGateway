@@ -11,6 +11,7 @@ namespace PaymentGatewayService.Models
 {
     public sealed class BankRequest
     {
+
         public BankRequest()
         {
 

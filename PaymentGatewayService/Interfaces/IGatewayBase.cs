@@ -7,7 +7,7 @@ using PaymentGatewayService.Models;
 
 namespace PaymentGatewayService.Interfaces
 {
-    internal interface IGatewayBase
+    public interface IGatewayBase
     {
         public string AccountId { get; set; }
         public string TerminalId { get; set; }

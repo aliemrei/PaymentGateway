@@ -8,5 +8,6 @@ namespace PaymentGatewayWebApi.Services
     {
         PaymentModel? MakePayment(PaymentModel model);
         GatewayBase? GetGatewayByClassName(string Classname);
+        GatewayBase? GetGateway(string Classname);
     }
 }

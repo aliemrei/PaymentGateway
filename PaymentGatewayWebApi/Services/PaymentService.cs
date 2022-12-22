@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using PaymentGatewayService;
+using PaymentGatewayService.CreationalDesignPatterns;
 using PaymentGatewayWebApi.Models;
 using PaymentGatewayWebApi.Repositories;
 using System.Reflection;
@@ -20,7 +21,7 @@ namespace PaymentGatewayWebApi.Services
 
         public PaymentModel? MakePayment(PaymentModel model)
         {
-            var gateway = GetGatewayByClassName(model.Gateway);
+            var gateway = GetGateway(model.Gateway); //GetGatewayByClassName(model.Gateway);
 
             if (gateway != null)
             {
@@ -66,6 +67,23 @@ namespace PaymentGatewayWebApi.Services
             }
 
             _logger.LogCritical($"PaymentGatewayService.{Classname} did not find!");
+
+            return null;
+        }
+
+        public GatewayBase? GetGateway(string Classname)
+        {
+            if (Enum.TryParse<BankEnum>(Classname, out var classname))
+            {
+                FactoryMethodDesignPattern gatewayFactory = new FactoryMethodDesignPattern();
+
+                var gateway = gatewayFactory.Creator(classname);
+
+                if (gateway != null)
+                    gateway.OnLog += gateway_OnLog;
+
+                return gateway;
+            }
 
             return null;
         }
