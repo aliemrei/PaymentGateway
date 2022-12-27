@@ -6,35 +6,34 @@ namespace PaymentGatewayService
     {
         public override void MakePayment()
         {
+
             try
             {
-                try
-                {
-                    this.internalMakePayment();
-                }
-                catch (Exception ex)
-                {
-                    this.Response.Errors.Add(ex.Message);
-                }
+                this.internalMakePayment();
+            }
+            catch (Exception ex)
+            {
+                this.Response.Errors.Add(ex.Message);
             }
             finally
             {
                 base.MakePayment();
             }
+
+
         }
         public override void CancelPayment()
         {
+
             try
             {
-                try
-                {
-                    this.internalCancelPayment();
-                }
-                catch (Exception ex)
-                {
-                    this.Response.Errors.Add(ex.Message);
-                }
+                this.internalCancelPayment();
             }
+            catch (Exception ex)
+            {
+                this.Response.Errors.Add(ex.Message);
+            }
+
             finally
             {
                 base.CancelPayment();
@@ -43,17 +42,16 @@ namespace PaymentGatewayService
 
         public override void RefundPayment(decimal Amount)
         {
+
             try
             {
-                try
-                {
-                    this.internalRefundPayment(Amount);
-                }
-                catch (Exception ex)
-                {
-                    this.Response.Errors.Add(ex.Message);
-                }
+                this.internalRefundPayment(Amount);
             }
+            catch (Exception ex)
+            {
+                this.Response.Errors.Add(ex.Message);
+            }
+
             finally
             {
                 base.RefundPayment(Amount);
@@ -79,12 +77,12 @@ namespace PaymentGatewayService
 
         public void internalCancelPayment()
         {
-          
+
         }
 
         public void internalRefundPayment(decimal Amount)
         {
-           
+
         }
     }
 }
